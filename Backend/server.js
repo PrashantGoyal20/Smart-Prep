@@ -5,9 +5,15 @@ import cookieParser from "cookie-parser"
 import speechRoute from "./Routes/Speech.js"
 import mongoose from "mongoose"
 import session from "express-session"
+import { Storage } from "@google-cloud/storage";
+
+const storage = new Storage();
+
+
 
 const app=express()
 dotenv.config()
+const [buckets] = await storage.getBuckets();
 
 app.use(
   cors({

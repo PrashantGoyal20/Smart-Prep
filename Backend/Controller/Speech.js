@@ -9,11 +9,7 @@ import { GoogleGenAI } from "@google/genai"
 import dotenv from "dotenv"
 import chat from "./ChatDB.js"
 import { error } from "console"
-import { Storage } from "@google-cloud/storage";
 
-const storage = new Storage();
-
-const [buckets] = await storage.getBuckets();
 
 dotenv.config()
 
