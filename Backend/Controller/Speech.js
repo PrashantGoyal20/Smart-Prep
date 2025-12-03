@@ -9,6 +9,10 @@ import { GoogleGenAI } from "@google/genai"
 import dotenv from "dotenv"
 import chat from "./ChatDB.js"
 import { error } from "console"
+import { Storage } from "@google-cloud/storage";
+
+const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const storage = new Storage({ credentials });
 
 dotenv.config()
 
