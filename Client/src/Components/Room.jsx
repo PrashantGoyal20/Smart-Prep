@@ -10,6 +10,7 @@ import { FaceMesh } from "@mediapipe/face_mesh"
 import { Camera } from "@mediapipe/camera_utils"
 
 const Room = () => {
+  const server= import.meta.env.VITE_API_URL
   const [mute, setMute] = useState(false)
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -117,7 +118,7 @@ const Room = () => {
     });
     loacateMarks(params.get('email'))
     const startInterview = async (req, res, next) => {
-      await axios.post(`http://localhost:3000/speech/chat-start${location.search}`,{resume:location.state.resume,email:location.state.email})
+      await axios.post(`${server}/speech/chat-start${location.search}`,{resume:location.state.resume,email:location.state.email})
     }
     startInterview()
   }, [location.search]);
@@ -141,7 +142,7 @@ const Room = () => {
       formData.append('timestamp', new Date().toISOString());
 
       try {
-        await axios.post(`http://localhost:3000/speech/speechAnalyse`, formData, { "Content-Type": "multipart/form-data" })
+        await axios.post(`${server}/speech/speechAnalyse`, formData, { "Content-Type": "multipart/form-data" })
         .then((res) => {
           const base64Audio = res.data.audio;
 

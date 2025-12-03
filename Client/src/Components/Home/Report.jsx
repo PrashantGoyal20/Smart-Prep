@@ -7,13 +7,14 @@ import './report.css'
 import {Play} from 'lucide-react'
 
 const Report = () => {
+  const server= import.meta.env.VITE_API_URL
   const [report, setReport] = useState([])
   const [load, setLoad] = useState(true)
   const location = useLocation()
   console.log(location.search)
   useEffect(() => {
     const fetchChat = async () => {
-      await axios.post(`http://localhost:3000/speech/analyseInterview${location.search}`).then((res) => {
+      await axios.post(`${server}/speech/analyseInterview${location.search}`).then((res) => {
         setReport(res.data.reply)
         setLoad(false)
       })
