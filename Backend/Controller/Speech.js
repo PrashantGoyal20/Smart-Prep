@@ -11,8 +11,9 @@ import chat from "./ChatDB.js"
 import { error } from "console"
 import { Storage } from "@google-cloud/storage";
 
-const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-const storage = new Storage({ credentials });
+const storage = new Storage();
+
+const [buckets] = await storage.getBuckets();
 
 dotenv.config()
 
