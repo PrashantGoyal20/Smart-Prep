@@ -59,7 +59,7 @@ export const speechAnalyzer = async (req, res, next) => {
       contentType: "audio/wav"
     });
 
-    const res = await axios.post(`${transformer}/stt`,
+    const response = await axios.post(`${transformer}/stt`,
       form,
       {
         headers: form.getHeaders(),
@@ -67,7 +67,7 @@ export const speechAnalyzer = async (req, res, next) => {
 
       });
 
-    const transcription = res.data.text
+    const transcription = response.data.text
 
     ans = transcription
     const { audioBase64, reply } = await interviewer()
