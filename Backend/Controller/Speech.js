@@ -85,7 +85,7 @@ export const speechAnalyzer = async (req, res, next) => {
 
     await session.save();
 
-    res.status(200).json({ audio: audioBase64 })
+    res.status(200).json({ success:true,audio: audioBase64 })
 
   } catch (error) {
     console.log('STT error:', error);
