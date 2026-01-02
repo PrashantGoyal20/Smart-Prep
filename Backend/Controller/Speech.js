@@ -8,6 +8,7 @@ import dotenv from "dotenv"
 import chat from "./ChatDB.js"
 import { error } from "console"
 import axios from "axios"
+import FormData from "form-data"
 
 
 dotenv.config()
@@ -20,7 +21,7 @@ let ans = ''
 let started = false
 
 ffmpeg.setFfmpegPath(ffmpegPath);
-const transformer=process.env.TRANSFORMERS_API_URL
+const transformer = process.env.TRANSFORMERS_API_URL
 
 
 //EXTRACT AUDIO FROM VIDEO BUFFER
@@ -30,11 +31,11 @@ export const audioExtraction = async (videoBuffer) => {
     const stream = streamifier.createReadStream(videoBuffer);
 
     ffmpeg(inputStream)
-      .inputFormat("webm")       
+      .inputFormat("webm")
       .noVideo()
-      .audioCodec("pcm_s16le")      
-      .audioChannels(1)        
-      .audioFrequency(16000)       
+      .audioCodec("pcm_s16le")
+      .audioChannels(1)
+      .audioFrequency(16000)
       .format("wav")
       .on("error", (err) => reject(err))
       .pipe()
@@ -52,15 +53,22 @@ export const speechAnalyzer = async (req, res, next) => {
     const videoBuffer = req.file.buffer;
     const { email } = req.body
     const audio = await audioExtraction(videoBuffer);
-    
-    const res=await axios.post(`${transformer}/stt`, audio, {
-  headers: {
-    "Content-Type": "audio/wav"
-  }
-});
+    const form = new FormData();
+    form.append("file", audio, {
+      filename: "audio.wav",
+      contentType: "audio/wav"
+    });
+
+    const res = await axios.post(`${transformer}/stt`,
+      form,
+      {
+        headers: form.getHeaders(),
+        maxBodyLength: Infinity,
+
+      });
 
     const transcription = res.data.text
-    
+
     ans = transcription
     const { audioBase64, reply } = await interviewer()
     const session = await chat.findOne({ email: email })
@@ -94,9 +102,9 @@ export const chat_starter = async (req, res, next) => {
   try {
     const { role, exp, name } = req.query;
     const { email, resume } = req.body
-    const existing=await chat.findOne({ email: email })
-    if(existing){
-      await chat.deleteOne({email:email})
+    const existing = await chat.findOne({ email: email })
+    if (existing) {
+      await chat.deleteOne({ email: email })
     }
     const session = await chat.create({ email: email })
 
@@ -115,7 +123,7 @@ export const chat_starter = async (req, res, next) => {
       content: user
     });
 
-    await axios.get(`${transformer}`,{contentType:"application/json"})
+    await axios.get(`${transformer}`, { contentType: "application/json" })
 
     chatSession = models.chats.create({
       model: "gemini-2.5-flash",
@@ -169,10 +177,10 @@ export const chatAnalyze = async (req, res, next) => {
     const { email } = req.query
     const chats = await chat.findOne({ email: email })
     console.log(chats)
-    var geminiHistory ='' 
+    var geminiHistory = ''
     chats.messages.slice(2).map(m => (
-      geminiHistory+=`role:`+ (m.role) === 'applicant' ? 'user' : 'model'+`parts:`+ m.content
-      
+      geminiHistory += `role:` + (m.role) === 'applicant' ? 'user' : 'model' + `parts:` + m.content
+
     ));
     const faces = []
     const gaze = []
@@ -200,8 +208,8 @@ export const chatAnalyze = async (req, res, next) => {
       }
        Stick to this json format only ...don't give any extra text`
     });
-    const reply=response.text.split('json')[1]
-    const cleaned = JSON.parse(reply.replace(/```(?:json)?\n?/g, '').replace('**','').replace(/^Report/, '').trim());
+    const reply = response.text.split('json')[1]
+    const cleaned = JSON.parse(reply.replace(/```(?:json)?\n?/g, '').replace('**', '').replace(/^Report/, '').trim());
     console.log(cleaned)
     res.status(200).json({
       reply: cleaned
