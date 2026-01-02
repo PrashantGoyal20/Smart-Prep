@@ -30,7 +30,7 @@ export const audioExtraction = async (videoBuffer) => {
     const chunks = [];
     const stream = streamifier.createReadStream(videoBuffer);
 
-    ffmpeg(inputStream)
+    ffmpeg(stream)
       .inputFormat("webm")
       .noVideo()
       .audioCodec("pcm_s16le")
