@@ -1,0 +1,34 @@
+.report-score{
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-heading{
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.score{
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.score-comment{
+color: grey;
+}
+
+.Content{
+  margin-top: 60px;
+}
+
+.arrows{
+  margin-right: 10px;
+  color: #ec4899;
+}
+
+.content-details{
+  margin-top: 20px;
+}
