@@ -30,7 +30,7 @@ export const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleFileUpload = (file) => {
-        if(file.size>10485760){
+        if (file.size > 10485760) {
             alert('File Size Greater than 10MB')
             return
         }
@@ -190,7 +190,7 @@ export const Home = () => {
     return (
         <div >
             <Header />
-            <div className='app' style={{marginTop:"40%"}}>
+            <div className='app' style={{ marginTop: "40%" }}>
                 <div className='backgroundOverlay'>
                     <div className='mouseGlow'
                         style={{
@@ -355,15 +355,15 @@ export const Home = () => {
                                         Media Interface
                                     </label>
                                     <div className='mediaButtons'>
-                                        {audioStatus?<button
+                                        {audioStatus ? <button
                                             onClick={cancelAudioPermissions}
                                             className='mediaButton'
                                             style={{
-                                                    backgroundColor: "rgba(99, 102, 241, 0.2)",
-                                                    borderColor: "#6366f1",
-                                                    color: "#ffffff",
-                                                    boxShadow: "0 8px 32px rgba(99, 102, 241, 0.3)",
-                                            
+                                                backgroundColor: "rgba(99, 102, 241, 0.2)",
+                                                borderColor: "#6366f1",
+                                                color: "#ffffff",
+                                                boxShadow: "0 8px 32px rgba(99, 102, 241, 0.3)",
+
                                             }}
                                         >
                                             <div className='mediaIconContainer'>

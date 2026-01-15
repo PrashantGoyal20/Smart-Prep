@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import './room.css'
-import CallEndIcon from '@mui/icons-material/CallEnd';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import MicOffIcon from '@mui/icons-material/MicOff';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SquareIcon from '@mui/icons-material/Square';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from "axios"
 import { FaceMesh } from "@mediapipe/face_mesh"
@@ -25,6 +24,7 @@ const Room = () => {
   const [noface,setNoface]=useState(false)
   const initializedRef = useRef(false);
   const navigate =useNavigate()
+  const [loading,setLoading]=useState(false)
   
 
   const loacateMarks = async (email) => {
@@ -155,7 +155,7 @@ const Room = () => {
             setAudioUrl(null);
             URL.revokeObjectURL(url);
           };
-
+          setLoading(false)
           audio.play();
         })
 
@@ -173,6 +173,7 @@ const Room = () => {
   const stopRecording = () => {
     if (recorderRef.current && recorderRef.current.state !== 'inactive') {
       recorderRef.current.stop();
+      setLoading(true)
     }
   };
 
@@ -218,8 +219,13 @@ const Room = () => {
 
 
       <div className='room-btn'>
-        <button className='mic' onClick={toggleMic}>{!isMuted ? <KeyboardVoiceIcon style={{ background: "blue", borderRadius: "50%", fontSize: "32px", padding: "10px" }} /> : <MicOffIcon style={{ backgroundColor: "red", borderRadius: "50%", fontSize: "32px", padding: "10px" }} />}</button>
-        <button className='leave' onClick={handleNavigation}><CallEndIcon />Leave</button>
+        {loading ? <div className='loader-container'><div className='loader'></div></div> : <><button className='mic' onClick={toggleMic}>{!isMuted ? <div className='mic-on'> <SquareIcon /> Speaking..</div> : <div className='mic-off'><PlayArrowIcon/> Start Speaking</div>}</button></>}
+        <button className='leave' style={{
+                                                backgroundColor: "rgba(203, 203, 239, 0.66)",
+                                                borderColor: "#0509ecff",
+                                                color: "#ffffff",
+                                                boxShadow: "0 8px 32px rgba(99, 102, 241, 0.3)",
+                                            }} onClick={handleNavigation}>End Interview</button>
 
       </div>
 

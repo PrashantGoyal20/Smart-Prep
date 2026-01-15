@@ -12,11 +12,10 @@
 
 .room-btn {
     display: flex;
-    width: 300px;
-    margin-left: 40%;
+    width: 400px;
+    margin-left: 30%;
     margin-right: 50%;
     justify-content: space-around;
-    /* align-items: center; */
     margin-top: 20px;
 }
 
@@ -26,19 +25,70 @@
 }
 
 .leave {
-    background: blue;
+    width: 160px;
     display: flex;
-    align-items: center;
-    width: 100px;
-    justify-content: space-evenly;
-    height: 50px;
-    border-radius: 10px;
-    cursor: pointer;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
 }
 
-.leave:hover {
-    width: 110px;
-    transition: ease 0.5s;
+.loader-container{
+    background-color: rgba(255, 99, 71, 0.534);
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid red;
+    border-radius: 10px ;
+}
+
+.loader {
+  border: 6px solid #f3f3f3b8;
+  border-top: 6px solid #e5ebeea4;
+  border-radius: 50%;
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.mic-on{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 16px;
+    width: 160px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 255, 0.333);
+    position: relative;
+    border: 2px solid blue;
+}
+
+.mic-off{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 160px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: rgba(255, 0, 0, 0.333);
+    position: relative;
+    border: 2px solid rgb(255, 0, 17);
 }
 
 .mic {
