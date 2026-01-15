@@ -118,8 +118,12 @@ const Room = () => {
     });
     loacateMarks(params.get('email'))
     const startInterview = async (req, res, next) => {
+      try{
       await axios.post(`${server}/speech/chat-start${location.search}`,{resume:location.state.resume,email:location.state.email})
-    }
+      }catch(err){
+        console.log(err)
+        handleNavigation();
+      }}
     startInterview()
   }, [location.search]);
 
@@ -161,6 +165,7 @@ const Room = () => {
 
       } catch (err) {
         console.error('Upload failed:', err);
+        handleNavigation();
       }
 
       chunks.current = [];
