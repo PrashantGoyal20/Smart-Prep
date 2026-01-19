@@ -7,6 +7,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from "axios"
 import { FaceMesh } from "@mediapipe/face_mesh"
 import { Camera } from "@mediapipe/camera_utils"
+import { useContext } from 'react';
+import { Context } from '../main';
 
 const Room = () => {
   const server= import.meta.env.VITE_API_URL
@@ -15,7 +17,6 @@ const Room = () => {
   const streamRef = useRef(null);
   const recorderRef = useRef(null);
   const chunks = useRef([]);
-  var email
   const [isMuted, setIsMuted] = useState(true);
   const location = useLocation()
   const [audioUrl, setAudioUrl] = useState(null);
@@ -25,6 +26,7 @@ const Room = () => {
   const initializedRef = useRef(false);
   const navigate =useNavigate()
   const [loading,setLoading]=useState(false)
+  const {user,isAuthorized}=useContext(Context)
   
 
   const loacateMarks = async (email) => {
@@ -99,10 +101,12 @@ const Room = () => {
     };
   }
   useEffect(() => {
+
+    if(!isAuthorized){
+      navigate('/login')
+    }
     
     const params = new URLSearchParams(location.search);
-    email=params.get('email')
-    console.log(params.get("email"))
     const navEntry = performance.getEntriesByType("navigation")[0];
     const isReload = navEntry && navEntry.type === "reload";
 
@@ -119,7 +123,12 @@ const Room = () => {
     loacateMarks(params.get('email'))
     const startInterview = async (req, res, next) => {
       try{
-      await axios.post(`${server}/speech/chat-start${location.search}`,{resume:location.state.resume,email:location.state.email})
+      await axios.post(`${server}/speech/chat-start${location.search}`,{resume:location.state.resume}, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
       }catch(err){
         console.log(err)
         handleNavigation();
@@ -142,11 +151,15 @@ const Room = () => {
       const blob = new Blob(chunks.current, { type: 'video/webm' });
       const formData = new FormData();
       formData.append('file', blob);
-      formData.append('email', location.state.email);
       formData.append('timestamp', new Date().toISOString());
 
       try {
-        await axios.post(`${server}/speech/speechAnalyse`, formData, { "Content-Type": "multipart/form-data" })
+        await axios.post(`${server}/speech/speechAnalyse`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data" ,
+        },
+        withCredentials: true,
+      })
         .then((res) => {
           const base64Audio = res.data.audio;
 
@@ -195,7 +208,7 @@ const Room = () => {
   };
 
   const handleNavigation=()=>{
-    navigate(`/interview-summary?email=${email}`)
+    navigate(`/interview-summary`)
   }
 
   return (

@@ -1,20 +1,26 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Loader from '../Loader'
 import Header from './Header'
 import './report.css'
 import {Play} from 'lucide-react'
+import { useContext } from 'react'
+import { Context } from '../../main'
 
 const Report = () => {
+  const {user,isAuthorized}=useContext(Context)
   const server= import.meta.env.VITE_API_URL
   const [report, setReport] = useState([])
   const [load, setLoad] = useState(true)
-  const location = useLocation()
-  console.log(location.search)
+  const navigate=useNavigate()
+
   useEffect(() => {
+    if(!isAuthorized){
+      navigate('/login')
+    }
     const fetchChat = async () => {
-      await axios.post(`${server}/speech/analyseInterview${location.search}`).then((res) => {
+      await axios.post(`${server}/speech/analyseInterview`,{start:"start"}, {withCredentials:true}).then((res) => {
         setReport(res.data.reply)
         setLoad(false)
       })

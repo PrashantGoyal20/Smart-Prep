@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import speechRoute from "./Routes/Speech.js"
+import authRoute from "./Routes/auth.js"
 import mongoose from "mongoose"
 import session from "express-session"
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/speech',speechRoute)
+app.use('/auth',authRoute)
 
 const PORT=process.env.PORT
 mongoose.connect(process.env.MONGO_URL, {

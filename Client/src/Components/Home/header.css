@@ -78,7 +78,6 @@
 }
 
 
-/* Navbar Styles */
 .navbar {
   background-color: rgba(17, 17, 17, 0.8);
   border-bottom: 1px solid rgba(99, 102, 241, 0.3);
@@ -95,6 +94,7 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
+  gap: 14px;
   justify-content: space-between;
   align-items: center;
   height: 80px;
@@ -160,7 +160,21 @@
   overflow: hidden;
 }
 
-/* Main Content */
+@media  screen and (max-width:450px) {
+  .navLink {
+    font-size: 14px;
+    padding: 6px 2px;
+    gap: 4px;
+  }
+  .navLinks{
+    margin-left: 20px;
+  }
+
+  .container{
+    margin-top: 980px;
+  }
+}
+
 .main {
   padding: 4rem 2rem;
   max-width: 1200px;
@@ -199,7 +213,6 @@
   margin: 0 auto;
 }
 
-/* Form Styles */
 .form {
   background-color: rgba(26, 26, 26, 0.8);
   padding: 3rem;
@@ -269,7 +282,6 @@
   pointer-events: none;
 }
 
-/* Upload Styles */
 .uploadSection {
   margin-bottom: 3rem;
 }
@@ -363,9 +375,6 @@
   flex-direction: column;
   align-items: flex-start;
 }
-
-/* ... Continue converting the rest of your styles (upload icons, buttons, media controls, submit button, etc.) */
-
 .submitButton {
   width: 100%;
   padding: 20px 32px;

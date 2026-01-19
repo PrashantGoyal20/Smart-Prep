@@ -301,7 +301,6 @@ export const Home = () => {
                                 </div>
                             </div>
 
-                            {/* Enhanced PDF Upload */}
                             <div className='uploadSection'>
                                 <label className='label'>
                                     <Upload size={14} className='labelIcon' />

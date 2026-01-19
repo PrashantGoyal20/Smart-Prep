@@ -1,0 +1,16 @@
+.error{
+    color:rgb(255, 255, 255);
+    margin-top: 20px;
+    position: sticky;
+    z-index: 100;
+    font-size: x-large;
+    background-color: rgb(46, 44, 44);
+    width: max-content;
+    padding: 20px;
+    border-radius: 20px;
+    top: 150px;
+    left: 40%;
+}
+.error-hide{
+    display:none;
+}

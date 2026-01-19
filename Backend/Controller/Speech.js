@@ -9,6 +9,7 @@ import chat from "./ChatDB.js"
 import { error } from "console"
 import axios from "axios"
 import FormData from "form-data"
+import { User } from "./AuthDB.js"
 
 
 dotenv.config()
@@ -51,7 +52,9 @@ export const audioExtraction = async (videoBuffer) => {
 export const speechAnalyzer = async (req, res, next) => {
   try {
     const videoBuffer = req.file.buffer;
-    const { email } = req.body
+    const { id } = req.user
+    const userEmail = await User.findById(id)
+    const email = userEmail.email
     const audio = await audioExtraction(videoBuffer);
     const form = new FormData();
     form.append("file", audio, {
@@ -104,7 +107,11 @@ export const chat_starter = async (req, res, next) => {
 
   try {
     const { role, exp, name } = req.query;
-    const { email, resume } = req.body
+    const { resume } = req.body
+    const { id } = req.user
+    const userEmail = await User.findById(id)
+    console.log(userEmail)
+    const email = userEmail.email
     const existing = await chat.findOne({ email: email })
     if (existing) {
       await chat.deleteOne({ email: email })
@@ -177,9 +184,10 @@ export const interviewer = async (req, res, next) => {
 
 export const chatAnalyze = async (req, res, next) => {
   try {
-    const { email } = req.query
+    const { id } = req.user
+    const userEmail = await User.findById(id)
+    const email = userEmail?.email
     const chats = await chat.findOne({ email: email })
-    console.log(chats)
     var geminiHistory = ''
     chats.messages.slice(2).map(m => (
       geminiHistory += `role:` + (m.role) === 'applicant' ? 'user' : 'model' + `parts:` + m.content
@@ -187,7 +195,6 @@ export const chatAnalyze = async (req, res, next) => {
     ));
     const faces = []
     const gaze = []
-    console.log(geminiHistory)
     // chats.emotions.face.map(f => (
     //   faces.add(f)
     // ))
@@ -225,8 +232,11 @@ export const chatAnalyze = async (req, res, next) => {
 
 export const viewBehaviour = async (req, res, next) => {
   try {
-    const { email, faces, gaze } = req.body
+    const { faces, gaze } = req.body
     console.log('start recognition')
+    const { id } = req.user
+    const userEmail = await User.findById(id)
+    const email = userEmail.email
     const chats = await chat.findOne({ email: email })
     if (chats) {
       const update = await chat.findByIdAndUpdate(chats._id, {
