@@ -1,10 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect,useContext } from 'react'
 import { Mic, MicOff, Video, VideoOff, Upload, Send, Sparkles, Zap, Users } from 'lucide-react';
 import Header from './Header'
 import './header.css'
 import { useNavigate } from 'react-router-dom';
 import * as pdfjsLib from 'pdfjs-dist';
 import workerURL from "pdfjs-dist/build/pdf.worker.min?url";
+import {Context} from '../../main'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerURL;
 
@@ -22,7 +23,7 @@ export const Home = () => {
     const videoRef = useRef()
     const audioRef = useRef()
     const navigate = useNavigate()
-
+    const {isAuthorized}=useContext(Context)
 
     const [isMicOn, setIsMicOn] = useState(false);
     const [isDragOver, setIsDragOver] = useState(false);
@@ -172,6 +173,12 @@ export const Home = () => {
     }
 
     const navigateInterview = async () => {
+        if(isAuthorized==false){
+            window.alert('Please login to continue')
+            navigate('/login')
+            return;
+        }
+        
         if (!resume || !name || !post || !email) {
             window.alert('Enter All Credentials')
             return;
